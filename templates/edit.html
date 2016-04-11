@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+    {% block content %}
+        <section class="">
+            <form action="#" method="POST">
+                <label for="picture">Picture:</label>
+                
+                    <input type="text" maxlength="80" class="" name="picture" value="{{ editGame.picture }}">
+                
+                <label for="name">Name:</label>
+                    
+                    <input type="text" maxlength="80" class="" name='name' value="{{ editGame.name }}"
+                
+                <label for="console">Console:</label>
+                <select name="console">
+                    {% for i in consoles %}
+                    <option value="{{ i.name }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+                    <input type><!-- drop down menu for the consoles -->
+                <label for="description">Description:</label>
+
+                    <textarea><!--    text area should accept 250 characters -->
+
+                <button type='submit' class='' id=''>Save</button>
+
+                <a href='{{ url_for("welcome") }}'>
+                <button>Cancel</button></a>
+{% endblock %}

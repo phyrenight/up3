@@ -1,0 +1,52 @@
+body, html{
+	height:100%;
+}
+header {
+	border-bottom: 1px solid #000000;
+}
+h1 {
+	text-align:center;
+}
+#crumbs {
+	font-size:75%;
+}
+#crumbs p{
+	display:inline-block;
+}
+aside {
+	display:inline-block;
+    border:1px solid #000000;
+    text-align:center;
+    width:20%;
+    margin-top:3%;
+    margin-left:5%;
+    border-radius:5%;
+}
+aside #links {
+	margin-bottom:10%;
+}
+aside a {
+	display:block;
+	margin:3%;
+}
+
+article {
+	display:inline-block;
+	border:1px solid #000000;
+	position:relative;
+	float:right;
+	width:70%;
+    height:100%;
+    margin-top:3%;
+}
+article h2 {
+	text-align:center;
+}
+.game_card {
+	margin-right:2%;
+	margin-left:2%;
+	border:1px solid #000000;
+}
+#item {
+	margin-left:5%;
+}

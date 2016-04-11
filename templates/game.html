@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- crumbs -->
+<div id="crumbs">
+    <a href='/welcome'>home/</a>
+    <p> {{ usersGames.name }}/ </p>
+</div>
+<aside>
+  <h2>Consoles</h2>
+    {% for system in console %}
+    <a href='{{url_for("displayConsoleGames", title=system.name)}}'>
+    {{ system.name }}</a>
+    {% endfor %}
+    </aside>
+</aside>
+<article>
+    <section id="item">
+        <h2> {{ usersGames.name }} </h2>
+        <img src=' {{ usersGames.pic }}' title=" {{ usersGames.title }}" >
+        <p>owner: {{usersGames.user_id}}</p>
+        <p> Description:{{ usersGames.description }}</p>
+    </section>
+</article>    
+{% endblock %}

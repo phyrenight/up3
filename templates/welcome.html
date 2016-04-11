@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="crumbs">
+<!-- crumbs -->
+<a href="/welcome">/home/</a>
+</div>
+<aside>
+    <h2>Consoles</h2>
+    {% for system in consoles %}
+    <a href='{{url_for("displayConsoleGames",title=system.name ) }}'>
+    {{system.name}}</a>
+    {% endfor %}
+</aside>
+<article>
+    <section>
+
+            <h2>Welcome to GameSwap</h2>
+
+    </section>
+</article>
+{% endblock %}

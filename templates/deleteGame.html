@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="crumbs">
+   <a href="/welcome">home</a>
+   <p> /delete game</p>
+</div>
+<aside id="console">
+    {% for system in console %}
+    <a href='{{url_for("displayConsoleGames", title=system.name)}}'>{{ system.name }} </a>
+    {% endfor %}
+</aside>
+<article>
+    <section>
+        <h2>Delete a game</h2>
+        <p>Do you wish to delete {{ Game.name }}?</p>
+        <form action="#" method="post">
+            <button type="submit">Delete</button>
+            <a href='{{url_for("welcome")}}'><button>cancel</button></a>
+        </form>
+   </section>
+</article>
+{% endblock %}

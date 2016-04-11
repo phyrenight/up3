@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang = 'en'>
+<!-- Base.html used to keep all common elements of the html 
+     page on one page -->
+    <head>
+        <title>Game Swap</title>
+        <meta charset='utf-8'>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+    </head>
+    <body>
+        <header role="banner">
+            <h1>Game Swap</h1>
+            <nav>
+              <div>
+                {% if 'username' not in session %}
+                    <a href="{{url_for('loginPage')}}">Log in</a>
+                {% else %}
+                    <a href="{{url_for('disconnect')}}">{{session['username']}}</a>
+                {% endif %}
+              </div>
+            </nav>
+        </header>
+            {% block content %}
+            {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="crumbs">
+    <a href='/welcome'>Welcome</a>
+    <p>new game</p>
+</div>
+<aside id="consoles">
+    {% for systems in console %}
+        <a href='{{url_for("displayConsoleGames", title=system.name)}}'>{{ system.name }}</a>
+    {% endfor %}
+</aside>
+<article>
+    <section>
+        <form action='#' method="post">
+        <label for="name">Name:</label>
+        <input type='text' maxlength='80' name='name' placeholder="Enter game name">
+
+        <label for='console'>Console:</label>
+        <select name="console">
+        {% for i in consoles %}
+            <option value="{{i.name}}">{{i.name}}</option>
+        {% endfor %}
+        </select>
+        
+        <label for="description">Description:</label>
+        <textarea maxlength="250" rows="3" name="description" placeholder="Enter game description"></textarea>
+
+        <label for="user_id">User_id:</label>
+        <input type="text" name:'user_id' placeholder="user id">
+        <button type="submit" id="submit">submit</button>
+        </form>
+    </section>
+</article>
+{% endblock %}
