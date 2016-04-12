@@ -50,4 +50,10 @@ session.add(game3)
 game4 = Game(name='Uncharted 4', console='Ps4', description='sequal to part 3', user_id='4')
 session.add(game4)
 
+game5 = Game(name='Metroid', console='Wii', description="Samus on another adventure", user_id='2')
+session.add(game5)
+
+game6 = Game(name='Crazy Taxi', console='Ps4', description="Crazy mayhem dropping off passengers", user_id='4')
+session.add(game6)
+
 session.commit()

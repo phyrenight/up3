@@ -50,3 +50,11 @@ article h2 {
 #item {
 	margin-left:5%;
 }
+#buttons {
+	text-align:center;
+	display:block;
+	border:1px solid #000000;
+	margin:5% 20%;
+	padding-bottom:3%;
+	border-radius:39%;
+}
