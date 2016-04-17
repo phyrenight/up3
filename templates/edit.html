@@ -1,28 +1,56 @@
 {% extends "base.html" %}
     {% block content %}
-        <section class="">
+    <!-- crumbs -->
+    <div id="crumbs">
+    <a href="/welcome">home/</a>
+    <a href='{{url_for("displayConsoleGames", title=editGame.console )}}'>{{ editGame.console }}/</a><!-- console of the game -->
+    <a href='{{url_for("gameInfo",console=editGame.console, Game_id=editGame.id)}}'>{{ editGame.name }}/</a>
+    <p>Edit game</p>
+    </div>
+    <aside>
+      <h2>Consoles</h2>
+      <div id="links">
+        {% for system in consoles %}
+          <a href='{{url_for("displayConsoleGames", title=system)}}'>{{ system }}</a>
+        {% endfor %}
+      </div>
+    </aside>
+    <article>
+        <section >
+        <h2> Edit game</h2>
             <form action="#" method="POST">
-                <label for="picture">Picture:</label>
-                
-                    <input type="text" maxlength="80" class="" name="picture" value="{{ editGame.picture }}">
-                
-                <label for="name">Name:</label>
-                    
-                    <input type="text" maxlength="80" class="" name='name' value="{{ editGame.name }}"
-                
-                <label for="console">Console:</label>
+                <div class="myForm">
+                <label for="picture">Picture:
+                    <input type="text" maxlength="80" name="picture" value="{{ editGame.picture }}">
+                </label>
+                <br/>
+                <label for="name">Name:
+                  <input type="text" maxlength="80" name='name' value="{{ editGame.name }}" placeholder="{{ editGame.name }}">
+                </label>
+                <br/>
+              
+                <label for="description">Description:
+                    <textarea name="description" placeholder="{{ editGame.description }}" length="250"></textarea>
+                </label>
+                <br/>
+
+                <label for="console">Console:
                 <select name="console">
                     {% for i in consoles %}
                     <option value="{{ i.name }}">{{ i.name }}</option>
                     {% endfor %}
                 </select>
-                    <input type><!-- drop down menu for the consoles -->
-                <label for="description">Description:</label>
+                </label>
+                <br/>
+                </div>
+                <br/>
 
-                    <textarea><!--    text area should accept 250 characters -->
-
-                <button type='submit' class='' id=''>Save</button>
-
-                <a href='{{ url_for("welcome") }}'>
-                <button>Cancel</button></a>
+                <div id="submit">
+                <button type='submit'>Save</button>
+                <a href='{{ url_for("welcome") }}' id="cancel"><div>
+                Cancel</div></a>
+                </div>
+            </form>
+        </section>
+    </article>
 {% endblock %}

@@ -6,16 +6,37 @@
 </div>
 <aside>
     <h2>Consoles</h2>
+    <div id="links">
     {% for system in consoles %}
-    <a href='{{url_for("displayConsoleGames",title=system.name ) }}'>
+    <a href='{{url_for("displayConsoleGames",title=system ) }}'>
     {{system.name}}</a>
     {% endfor %}
+    </div>
 </aside>
 <article>
     <section>
-
             <h2>Welcome to GameSwap</h2>
-
+    </section> 
+    <section id="flash">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li><strong>{{ message }} </strong></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+    </section>
+    <section id="recentGames">
+       <h2>Recent Games:</h2>
+       <div id="games">
+       </div>
+    </section>
+    <section id="gamingNews">
+      <h2>Gaming News</h2>
+      <div id="news">
+      </div>
     </section>
 </article>
 {% endblock %}

@@ -19,7 +19,7 @@ aside {
     text-align:center;
     width:20%;
     margin-top:3%;
-    margin-left:5%;
+    margin-left:3%;
     border-radius:5%;
 }
 aside #links {
@@ -38,6 +38,7 @@ article {
 	width:70%;
     height:100%;
     margin-top:3%;
+    margin-right:3%;
 }
 article h2 {
 	text-align:center;
@@ -47,7 +48,10 @@ article h2 {
 	margin-left:2%;
 	border:1px solid #000000;
 }
-#item {
+.game_card p, .game_card h3{
+	margin-left:3%;
+}
+#item , #message{
 	margin-left:5%;
 }
 #buttons {
@@ -57,4 +61,24 @@ article h2 {
 	margin:5% 20%;
 	padding-bottom:3%;
 	border-radius:39%;
+}
+#modify {
+	margin-left:24%;
+}
+#modify a{
+    margin-left:4%;
+}
+#delete {
+	color:red;
+}
+.myForm {
+    margin-top:5%;
+    margin-left:30%;
+}
+#submit {
+     text-align:center;
+}
+#cancel{
+	display:inline-block;
+
 }

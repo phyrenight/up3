@@ -5,18 +5,23 @@
    <p> /delete game</p>
 </div>
 <aside id="console">
-    {% for system in console %}
-    <a href='{{url_for("displayConsoleGames", title=system.name)}}'>{{ system.name }} </a>
+    <h2>Consoles</h2>
+    <div id="links">
+    {% for system in consoles %}
+    <a href='{{url_for("displayConsoleGames", title=system)}}'>{{ system }} </a>
     {% endfor %}
+    </div>
 </aside>
 <article>
     <section>
-        <h2>Delete a game</h2>
-        <p>Do you wish to delete {{ Game.name }}?</p>
+        <h2><span id="delete">Delete</span> {{ Game.name }}</h2>
+        <div id="message">
+        <p>Do you wish to <span id="delete">delete</span> {{ Game.name }}?</p>
         <form action="#" method="post">
             <button type="submit">Delete</button>
             <a href='{{url_for("welcome")}}'><button>cancel</button></a>
         </form>
+        </div>
    </section>
 </article>
 {% endblock %}

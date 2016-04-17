@@ -11,11 +11,13 @@ import requests
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import User, Game, Base, Consoles
+from sqlalchemy.engine.url import URL
+
 
 app = Flask(__name__)
 app.config.from_object('config')
 
-engine = create_engine('sqlite:///gameswap.db')
+engine = create_engine('sqlite:///gameswap')
 Base.metadata.bind = engine
 DB = sessionmaker(bind=engine)
 session = DB()
@@ -36,23 +38,29 @@ def loginPage():
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
     if request.args.get('state') != login_session['state']:
-        response = make_response(json.dump('Invalid state parameter'))
+        response = make_response(json.dump('Invalid state parameter'),401)
         response.headers['Content-Type'] = 'application/json'
         return response
     access_token = request.data
-    app_id = json.loads(open('fb_secrets.json', 'r').read())['web']
-    ['app_id']
-    app_secret = json.loads(open('fb_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (app_id, app_secret, access_token)
-    ht = httplib2.Http()
 
+    app_id = json.loads(open('fb_secrets.json', 'r').read())["web"]["app_id"]
+    print app_id
+    app_secret = json.loads(open('fb_secrets.json', 'r').read())['web']['app_secret']
+    print app_secret 
+    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' %(app_id, app_secret, access_token)
+    ht = httplib2.Http()
+    print url
     result = ht.request(url, 'GET')[1]
+    userinfo_url = "https://graph.facebook.com/v2.4/me"
     token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
+    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' %token
     ht = httplib2.Http()
     result = ht.request(url, 'GET')[1]
+
+
     data = json.loads(result)
+
     login_session['provider'] = 'facebook'
     login_session['username'] = data["name"]
     login_session['email'] = data["email"]
@@ -230,17 +238,12 @@ def disconnect():
         del login_session['picture']
         del login_session['user_id']
         del login_session['provider']
-        flash("You have successfull been logged out.")
+        flash("You have successfully logged out.")
         return redirect(url_for('welcome'))
     else:
-        flash("You were not logged in")
+        flash("You are not logged in")
         return redirect(url_for('welcome'))
 
-
-@app.route('/game/<int:game_id>/JSON')
-def GamesJSON(Game_id):
-    game = session.query(Games).filter_by(Game_id=Game_id).one()
-    
 
 @app.route('/welcome')
 def welcome():
@@ -249,8 +252,16 @@ def welcome():
 
 
 def get_Consoles():
-    systems = session.query(Consoles).all()
-    return systems
+    systems = session.query(Game.console).distinct()
+    systemsList = list()
+    for i in systems:
+        lst = list(i)
+        stri = " ".join(lst)
+        systemsList.append(stri)
+    for i in systemsList:
+        print i
+    #systems = session.query(Consoles).all()
+    return systemsList
 
 
 @app.route('/console/<title>/Games')
@@ -262,46 +273,52 @@ def displayConsoleGames(title):
 
 @app.route('/edit_game/<int:Game_id>', methods=['GET', 'POST'])
 def editGame(Game_id):
-    editGame = session.query(Game).filter_by(id=Game.id).one()
-    owner = editGame.id
-    if 'username' not in login_session or owner.id != login_session['user_id']:
+    editGame = session.query(Game).filter_by(id=Game_id).one()
+    if 'username' not in login_session:
         return redirect('/login')
     consoles = get_Consoles()
+    if editGame.user_name != login_session['username']:# to test just change editGame.user_name to editGame.id
+        return 'hello world'
     if request.method == 'POST':
+
         if request.form['name']:
-            edit.name = request.form['name']
-        if request.form['pic']:
-            edit.pic = request.form['pic']
+            editGame.name = request.form['name']
+            print "hi"
+        if request.form['picture']:
+            editGame.pic = request.form['picture']
+            print "bye"
         if request.form['console']:
-            edit.console = request.form['console']
+            editGame.console = request.form['console']
         if request.form['description']:
-            edit.description = request.form['description']
-        session.add(edit)
+            editGame.description = request.form['description']
+        session.add(editGame)
         session.commit()
         flash('Game updated')
-        return redirect(url_for('welcome', consoles=consoles))
+        return redirect(url_for('welcome'))
     else:
-        return render_template('edit.html', editGame=Game_id, consoles=consoles)
+        return render_template('edit.html', editGame=editGame, consoles=consoles)
 
 
 @app.route('/delete game/<int:Game_id>', methods=['GET', 'POST'])
 def deleteGame(Game_id):
-    deleteGame = session.query(Game).filter_by(id=Game.id).one()
-    owner = deleteGame.id
-    if username not in login_session or owner.id != login_session['user_id']:
+    consoles = get_Consoles()
+    deleteGame = session.query(Game).filter_by(id=Game_id).one()
+    title = deleteGame.name
+    if 'username' not in login_session: 
        return('/login')
     console = deleteGame.console
-    if login_session['user_id'] != Game.user_id:
-        return "<script>function (){alert('This is not your item so you cannot delete it.');}\
+    if deleteGame.user_name != login_session['username']:
+        pass
+    if login_session['username'] != deleteGame.user_name:
+        return "<script>function notUser(){alert('This is not your item so you cannot delete it.');}\
         </script><body onload=''>"
     if request.method == "POST":
     	session.delete(deleteGame)
     	session.commit()
-    	flash('{} deleted'.format(console))
-    	return redirect(url_for('displayConsoleGames', console=console))
+    	flash('{} has been deleted'.format(title))
+    	return redirect(url_for('welcome'))
     else:
-        return render_template('deleteGame.html', Game=deleteGame)
-
+        return render_template('deleteGame.html', consoles=consoles, Game=deleteGame)
 
 @app.route('/game/new', methods=['GET', 'POST'])
 def newGame():
@@ -310,31 +327,44 @@ def newGame():
     consoles = get_Consoles()
     if request.method == 'POST':
         newGame = Game(name=request.form['name'], console=request.form['console'],
-                        description=request.form['description'], user_id=login_session['user_id'])
+                        description=request.form['description'], user_name=login_session['username'])
         session.add(newGame)
         session.commit()
-        flash("{} added".format(newGame.name))
+        flash("{} has been added".format(newGame.name))
+        return render_template("welcome.html",consoles=consoles)
     return render_template("newgame.html", consoles=consoles)
 
 
-@app.route('/game/<Game_id>')
-def gameInfo(Game_id):
-    console = get_Consoles()
+@app.route('/console/<console>/game/<Game_id>')
+def gameInfo(console, Game_id):
+    consoles = get_Consoles()
     usersGames = session.query(Game).filter_by(id=Game_id).one()
-
-    return render_template('game.html', console=console, usersGames=usersGames)
+    if usersGames.user_name != login_session['username']:
+        print usersGames.user_name
+        for i in login_session:
+            print login_session['username']
+        return render_template('game.html', consoles=consoles, usersGames=usersGames)
+    else:
+        return render_template('privateGame.html', consoles=consoles, usersGames=usersGames)
 
 # JSON endpoints
+
+@app.route('/game/<int:game_id>/JSON')
+def GamesJSON(Game_id):
+    game = session.query(Games).filter_by(Game_id=Game_id).one()
+
 
 @app.route('/console/<console>/games/<game_title>/JSON')
 def gameJSON(game_title, console):
     gameDetails = session.query(Game).filter_by(name=game_title,  console=console).one()
     return jsonify(gameDetails=gameDetails.serialize)
 
+
 @app.route('/console/<console>/JSON')
 def consoleGames(console):
     allGames = session.query(Game).filter_by(console).all()
     return jsonify(allGames= [i.serialize for i in allGames])
+
 
 if __name__ == '__main__':
     app.debug = True

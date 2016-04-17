@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Game, Consoles
 import datetime
 
-engine = create_engine('sqlite:///gameswap.db')
+engine = create_engine('sqlite:///gameswap')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -38,22 +38,22 @@ session.add(console4)
 
 # add Game
 
-game1 = Game(name='Tetris', console='Ps4', description='none', user_id='0')
+game1 = Game(name='Tetris', console="Ps4",  user_name='Marc Preston')
 session.add(game1)
 
-game2 = Game(name='Gears of War 3', console='Xbox 360', description='none', user_id='1')
+game2 = Game(name='Gears of War 3', console='Xbox 360', description='none', user_name='Marc Preston')
 session.add(game2)
 
-game3 = Game(name='Undead Island', console='Xbox 360', description='Zombies on an island', user_id='2')
+game3 = Game(name='Undead Island', console='Xbox 360', description='Zombies on an island', user_name='Sam')
 session.add(game3)
 
-game4 = Game(name='Uncharted 4', console='Ps4', description='sequal to part 3', user_id='4')
+game4 = Game(name='Uncharted 4', console='Ps4', description='sequal to part 3', user_name='Marc Preston')
 session.add(game4)
 
-game5 = Game(name='Metroid', console='Wii', description="Samus on another adventure", user_id='2')
+game5 = Game(name='Metroid', console='Wii', description="Samus on another adventure", user_name='Sam')
 session.add(game5)
 
-game6 = Game(name='Crazy Taxi', console='Ps4', description="Crazy mayhem dropping off passengers", user_id='4')
+game6 = Game(name='Crazy Taxi', console='Ps4', description="Crazy mayhem dropping off passengers", user_name='Sam')
 session.add(game6)
 
 session.commit()

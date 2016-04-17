@@ -30,7 +30,7 @@
       </span>
     </div>   <!--remove approvalprompt for debugging only remove for production -->
     <!-- facebook sign in button -->
- 
+   <div id="fb-root"></div>
     <div class="fb-login-button" 
           data-max-rows="1"
           data-size="large"
@@ -38,81 +38,81 @@
           data-auto-logout-link="false"
           scope="public_profile,email"
           onlogin="sendTokenToServer();">
+
     </div>
     <div id="result"></div>
     <script>
        //google sign in
        function signInCallback(authResult){
-       	 if (authResult['code']) {
-       	 	$('#signinButton').attr('style', 'display:none');
-       	 	$.ajax({
-       	 		type: 'POST',
-       	 		url:'/gconnect?state={{STATE}}',
-       	 		processData: false,
-       	 		data: authResult['code'],
-       	 		contentType: 'application/octet-stream; chatset=utf-8',
-       	 		
-       	 		success: function(result) {
-       	 			if(result) {
-       	 				$('#result').html('Login Successful</br>' + result+'</br>Redirecting...')
-       	 				setTimeout(function() {
-       	 					window.location.href = "/welcome";
-       	 				}, 4000);
-       	 			}else if(authResult['error']){
+         if (authResult['code']) {
+          $('#signinButton').attr('style', 'display:none');
+          $.ajax({
+            type: 'POST',
+            url:'/gconnect?state={{STATE}}',
+            processData: false,
+            data: authResult['code'],
+            contentType: 'application/octet-stream; chatset=utf-8',
+            
+            success: function(result) {
+              if(result) {
+                $('#result').html('Login Successful</br>' + result+'</br>Redirecting...')
+                setTimeout(function() {
+                  window.location.href = "/welcome";
+                }, 4000);
+              }else if(authResult['error']){
 
-       	 				console.log('An error has occured: ' + authResult['error']);
-       	 			}else {
-       	 				$('#result').html('server-side call failed, check config and console.');
-       	 			}
-       	 		}
-       	 	});
-       	 }
+                console.log('An error has occured: ' + authResult['error']);
+              }else {
+                $('#result').html('server-side call failed, check config and console.');
+              }
+            }
+          });
+         }
        }
 
 
        // facebook sign in
        window.fbAsyncInit = function() {
-       	FB.init({
-       		appId    : '1158951324117308',
-       		cookie   : true,
-       		xfbml    : true,
-       		version  : 'v2.5'
-       	});
+        FB.init({     
+          appId    : '1158951324117308',
+          cookie   : true,
+          xfbml    : true,
+          version  : 'v2.6'
+        });
        };
        (function(d, s, id){
-       	  var js, fjs = d.getElementsByTagName(s)[0];
-       	  if (d.getElementById(id)) {return;}
-       	  js = d.createElement(s); js.id = id;
-       	  js.src = "//connect.facebook.net/en_US/sdk.js";
-       	  fjs.parentNode.insertBefore(js, fjs);
-       	}(document, 'script', 'facebook-jssdk'));
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
        
        function sendTokenToServer() {
-       	console.log("world");
-       	var access_token = FB.getAuthResponse()['accessToken'];
-       	console.log(access_token)
-       	console.log('welcome! fetching your information ...');
-       	FB.api('/me/', function(response) {
+        var access_token = FB.getAuthResponse()['accessToken'];
+        console.log(access_token)
+        console.log('welcome! fetching your information ...');
+        FB.api('/me/', function(response) {
            console.log('Success login for: ' + response.name);
         $.ajax({
-        	type: 'POST',
-        	url:   '/fbconnect?state={{STATE}}',
-        	processData: false,
-        	data: access_token,
-        	contentType: 'application/octet-stream; charset=utf-8',
-        	success: function(result) {
-        		console.log("hello")
-        		if (result){
-        			$('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
-        			setTimeout(function() {
-        				window.location.href = '/welcome';
-        			}, 4000);
-        		}else {
-        			$('#result').html('Server-side call failed, check config and console.');
-        		}
-        	}
+          type: 'POST',
+          url:   '/fbconnect?state={{STATE}}',
+          processData: false,
+          data: access_token,
+          contentType: 'application/octet-stream; charset=utf-8',
+          success: function(result) {
+            console.log("hello")
+            if (result){
+              $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+              setTimeout(function() {
+                window.location.href = '/welcome';
+              }, 4000);
+            }else {
+              $('#result').html('Server-side call failed, check config and console.');
+            }
+          }
         });
-       	});
+        });
        }
     </script>
 

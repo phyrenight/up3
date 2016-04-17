@@ -1,32 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="crumbs">
-    <a href='/welcome'>Welcome</a>
-    <p>new game</p>
+    <a href='/welcome'>Welcome/</a>
+    <p>new game/</p>
 </div>
 <aside id="consoles">
-    {% for systems in console %}
-        <a href='{{url_for("displayConsoleGames", title=system.name)}}'>{{ system.name }}</a>
+    <h2>Consoles</h2>
+    <div id="links">
+    {% for system in consoles %}
+        <a href='{{url_for("displayConsoleGames", title=system)}}'>{{ system }}</a>
     {% endfor %}
+    </div>
 </aside>
 <article>
     <section>
+    <h2>New game</h2>
         <form action='#' method="post">
-        <label for="name">Name:</label>
+        <label for="name">Name:
         <input type='text' maxlength='80' name='name' placeholder="Enter game name">
+        </label>
 
-        <label for='console'>Console:</label>
+        <label for='console'>Console:
         <select name="console">
         {% for i in consoles %}
             <option value="{{i.name}}">{{i.name}}</option>
         {% endfor %}
         </select>
+        </label>
         
-        <label for="description">Description:</label>
-        <textarea maxlength="250" rows="3" name="description" placeholder="Enter game description"></textarea>
-
-        <label for="user_id">User_id:</label>
-        <input type="text" name:'user_id' placeholder="user id">
+        <label for="description">Description:
+        <textarea maxlength="250" rows="3" name="description" placeholder="Enter a game description"></textarea>
+        </label>
+        <br/>
         <button type="submit" id="submit">submit</button>
         </form>
     </section>
