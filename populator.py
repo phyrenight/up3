@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Game, Consoles
 import datetime
 
-engine = create_engine('sqlite:///gameswap')
+engine = create_engine('sqlite:///gameswap.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()

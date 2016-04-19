@@ -17,7 +17,7 @@ from sqlalchemy.engine.url import URL
 app = Flask(__name__)
 app.config.from_object('config')
 
-engine = create_engine('sqlite:///gameswap')
+engine = create_engine('sqlite:///gameswap.db')
 Base.metadata.bind = engine
 DB = sessionmaker(bind=engine)
 session = DB()
@@ -262,7 +262,7 @@ def get_Consoles():
         print i
     #systems = session.query(Consoles).all()
     return systemsList
-
+#add a screen to add a new console, that also checks that console entered is new to the database
 
 @app.route('/console/<title>/Games')
 def displayConsoleGames(title):

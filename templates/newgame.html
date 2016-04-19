@@ -21,11 +21,7 @@
         </label>
 
         <label for='console'>Console:
-        <select name="console">
-        {% for i in consoles %}
-            <option value="{{i.name}}">{{i.name}}</option>
-        {% endfor %}
-        </select>
+            <input type="text" name="console" value="console" placeholder="enter console (Ex.Ps4)">
         </label>
         
         <label for="description">Description:

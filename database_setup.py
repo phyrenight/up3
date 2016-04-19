@@ -39,5 +39,5 @@ class Consoles(Base):
             'picture': self.picture,
         }
 
-engine = create_engine('sqlite:///gameswap')
+engine = create_engine('sqlite:///gameswap.db')
 Base.metadata.create_all(engine)

@@ -35,11 +35,7 @@
                 <br/>
 
                 <label for="console">Console:
-                <select name="console">
-                    {% for i in consoles %}
-                    <option value="{{ i.name }}">{{ i.name }}</option>
-                    {% endfor %}
-                </select>
+                    <input type="text" name="console" value="{{ editGame.console }}" placeholder="{{editGame.console}}">
                 </label>
                 <br/>
                 </div>
