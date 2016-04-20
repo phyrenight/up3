@@ -13,22 +13,23 @@
     </div>
 </aside>
 <article>
-    <section>
+    <section id="item">
     <h2>New game</h2>
-        <form action='#' method="post">
+        <form action='#' method="post" class="myForm">
         <label for="name">Name:
-        <input type='text' maxlength='80' name='name' placeholder="Enter game name">
+        <input type='text' maxlength='80' name='name' placeholder="Enter game name" required>
         </label>
-
+        <br />
         <label for='console'>Console:
-            <input type="text" name="console" value="console" placeholder="enter console (Ex.Ps4)">
+            <input type="text" name="console"  placeholder="Enter console (Ex.Ps4)" required>
         </label>
-        
+        <br/>
+
         <label for="description">Description:
         <textarea maxlength="250" rows="3" name="description" placeholder="Enter a game description"></textarea>
         </label>
         <br/>
-        <button type="submit" id="submit">submit</button>
+        <button type="submit">submit</button>
         </form>
     </section>
 </article>

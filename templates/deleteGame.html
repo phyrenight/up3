@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div id="crumbs">
-   <a href="/welcome">home</a>
-   <p> /delete game</p>
+   <a href="/welcome">home/</a>
+   <a href='{{url_for("displayConsoleGames", title=Game.console)}}'>{{ Game.console }}/</a>
+   <a href='{{url_for("gameInfo",console=Game.console,  Game_id=Game.id)}}'>{{ Game.name }}/</a>
+   <p>delete game/</p>
 </div>
 <aside id="console">
     <h2>Consoles</h2>
@@ -15,11 +17,11 @@
 <article>
     <section>
         <h2><span id="delete">Delete</span> {{ Game.name }}</h2>
-        <div id="message">
+        <div class="myform">
         <p>Do you wish to <span id="delete">delete</span> {{ Game.name }}?</p>
         <form action="#" method="post">
             <button type="submit">Delete</button>
-            <a href='{{url_for("welcome")}}'><button>cancel</button></a>
+            <a href='{{url_for("welcome")}}'><div id="cancel">Cancel</div></a>
         </form>
         </div>
    </section>

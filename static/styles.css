@@ -13,6 +13,9 @@ h1 {
 #crumbs p{
 	display:inline-block;
 }
+#new {
+	float:right;
+}
 aside {
 	display:inline-block;
     border:1px solid #000000;
@@ -32,23 +35,25 @@ aside a {
 
 article {
 	display:inline-block;
-	border:1px solid #000000;
 	position:relative;
+	border:1px solid #000000;
 	float:right;
 	width:70%;
     height:100%;
-    margin-top:3%;
     margin-right:3%;
 }
 article h2 {
 	text-align:center;
 }
 .game_card {
-	margin-right:2%;
-	margin-left:2%;
+	margin:3% 2%;
 	border:1px solid #000000;
 }
-.game_card p, .game_card h3{
+.game_card label, .game_card button{
+    margin-left:3%;
+    margin-bottom
+}
+.game_card *{
 	margin-left:3%;
 }
 #item , #message{
@@ -74,6 +79,7 @@ article h2 {
 .myForm {
     margin-top:5%;
     margin-left:30%;
+
 }
 #submit {
      text-align:center;
@@ -82,3 +88,7 @@ article h2 {
 	display:inline-block;
 
 }
+.myform {
+	text-align:center;
+}
+

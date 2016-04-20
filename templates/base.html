@@ -13,9 +13,10 @@
             <nav>
               <div>
                 {% if 'username' not in session %}
-                    <a href="{{url_for('loginPage')}}">Log in</a>
+                    <a href='{{url_for("loginPage")}}'>Log in</a>
                 {% else %}
-                    <a href="{{url_for('disconnect')}}">{{session['username']}}</a>
+                    <a href='{{url_for("disconnect")}}'>{{session['username']}}</a>
+                    <a href='{{url_for("newGame")}}' id="new">New game</a>
                 {% endif %}
               </div>
             </nav>

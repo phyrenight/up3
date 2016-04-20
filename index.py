@@ -258,11 +258,8 @@ def get_Consoles():
         lst = list(i)
         stri = " ".join(lst)
         systemsList.append(stri)
-    for i in systemsList:
-        print i
-    #systems = session.query(Consoles).all()
     return systemsList
-#add a screen to add a new console, that also checks that console entered is new to the database
+
 
 @app.route('/console/<title>/Games')
 def displayConsoleGames(title):
@@ -367,5 +364,4 @@ def consoleGames(console):
 
 
 if __name__ == '__main__':
-    app.debug = True
     app.run(host = '0.0.0.0', port = 5000)
