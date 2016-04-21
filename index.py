@@ -37,6 +37,9 @@ def loginPage():
 
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    """
+        facebook OAuth
+    """
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dump('Invalid state parameter'),401)
         response.headers['Content-Type'] = 'application/json'
@@ -96,6 +99,9 @@ def fbconnect():
 
 @app.route('/fbdisconnect')
 def fbdiscon():
+    """
+       disconnect for facebook
+    """
     facebook_id = login_session['facebook_id']
     access_token = login_session['access_token']
     url = 'https://graph.facebook.com/%s/permissions?access_token=%s' %(facebook_id, access_token)
@@ -106,6 +112,9 @@ def fbdiscon():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """
+        OAuth for google
+    """
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -168,14 +177,6 @@ def gconnect():
     if not user_id:
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
-
-    output = ''
-    output += '<h1>Welcome'
-    output += login_session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += login_session['picture']
-    output += '">'
     
     flash("You are now logged in as {}".format(login_session['username']))
 
@@ -183,6 +184,9 @@ def gconnect():
 
 
 def createUser(login_session):
+    """
+       Adds the user and user info to the database.
+    """
     newUser = User(name = login_session['username'], email = login_session['email'],
     	           picture = login_session['picture'])
     session.add(newUser)
@@ -197,6 +201,9 @@ def getUserInfo(user_id):
 
 
 def getUserId(email):
+    """
+       uses the users email to retrieve the users id
+    """
     try:
         user = session.query(User).filter_by(email = email).one()
         return user.id
@@ -204,8 +211,24 @@ def getUserId(email):
         return None
 
 
+def get_Consoles():
+    """
+       Changes keyedtuple into list (Removes (u') from output so just the console names are displayed)
+    """
+    systems = session.query(Game.console).distinct()
+    systemsList = list()
+    for i in systems:
+        lst = list(i)
+        stri = " ".join(lst)
+        systemsList.append(stri)
+    return systemsList
+
+
 @app.route('/gdisconnect')
 def gdiscon():
+    """
+        google disconnect
+    """
     creds = login_session.get('credentials')
     if creds is None:
         response = make_response(
@@ -225,6 +248,9 @@ def gdiscon():
 
 @app.route('/disconnect')
 def disconnect():
+    """
+        General disconnect
+    """
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdiscon()
@@ -247,35 +273,52 @@ def disconnect():
 
 @app.route('/welcome')
 def welcome():
+    """
+        home page
+    """
     consoles = get_Consoles()
     return render_template('welcome.html', consoles=consoles)
 
 
-def get_Consoles():
-    systems = session.query(Game.console).distinct()
-    systemsList = list()
-    for i in systems:
-        lst = list(i)
-        stri = " ".join(lst)
-        systemsList.append(stri)
-    return systemsList
-
 
 @app.route('/console/<title>/Games')
 def displayConsoleGames(title):
+    """
+        display all the games for that particular console
+    """
     consoles = get_Consoles()
     console_list = session.query(Game).filter_by(console=title).all()
     return render_template('console.html', consoles=consoles, Games=console_list, console_name=title)
 
 
+@app.route('/console/<console>/game/<Game_id>')
+def gameInfo(console, Game_id):
+    """
+        display details of the game 
+    """
+    consoles = get_Consoles()
+    usersGames = session.query(Game).filter_by(id=Game_id).one()
+    if usersGames.user_name != login_session['username']:
+        print usersGames.user_name
+        for i in login_session:
+            print login_session['username']
+        return render_template('game.html', consoles=consoles, usersGames=usersGames)
+    else:
+        return render_template('privateGame.html', consoles=consoles, usersGames=usersGames)
+
+
 @app.route('/edit_game/<int:Game_id>', methods=['GET', 'POST'])
 def editGame(Game_id):
+    """
+        edit games in the Game database
+    """
     editGame = session.query(Game).filter_by(id=Game_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     consoles = get_Consoles()
     if editGame.user_name != login_session['username']:# to test just change editGame.user_name to editGame.id
-        return 'hello world'
+        return "<script>function notUser(){alert('This is not your item so you cannot delete it.');}\
+        </script><body onload=''>"
     if request.method == 'POST':
 
         if request.form['name']:
@@ -296,6 +339,9 @@ def editGame(Game_id):
 
 @app.route('/delete game/<int:Game_id>', methods=['GET', 'POST'])
 def deleteGame(Game_id):
+    """
+       user can delete games they added from the Game database
+    """
     consoles = get_Consoles()
     deleteGame = session.query(Game).filter_by(id=Game_id).one()
     title = deleteGame.name
@@ -333,17 +379,6 @@ def newGame():
     return render_template("newgame.html", consoles=consoles)
 
 
-@app.route('/console/<console>/game/<Game_id>')
-def gameInfo(console, Game_id):
-    consoles = get_Consoles()
-    usersGames = session.query(Game).filter_by(id=Game_id).one()
-    if usersGames.user_name != login_session['username']:
-        print usersGames.user_name
-        for i in login_session:
-            print login_session['username']
-        return render_template('game.html', consoles=consoles, usersGames=usersGames)
-    else:
-        return render_template('privateGame.html', consoles=consoles, usersGames=usersGames)
 
 # JSON endpoints
 
