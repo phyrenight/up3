@@ -24,17 +24,13 @@ class Game(Base):
     picture = Column(String(250))
     user = relationship('User')
 
-class Consoles(Base):
-    __tablename__ = 'Consoles'
-    name = Column(String(80), primary_key = True)
-
     @property
     def serialize(self):
         return {
             'name': self.name,
             'id': self.id,
             'console': self.console,
-            'user_name': self.user_id,
+            'user_name': self.user_name,
             'description': self.description,
             'picture': self.picture,
         }

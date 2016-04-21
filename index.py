@@ -10,7 +10,7 @@ from flask import make_response, url_for, redirect, render_template
 import requests
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import User, Game, Base, Consoles
+from database_setup import User, Game, Base
 from sqlalchemy.engine.url import URL
 
 
@@ -280,10 +280,8 @@ def editGame(Game_id):
 
         if request.form['name']:
             editGame.name = request.form['name']
-            print "hi"
         if request.form['picture']:
             editGame.pic = request.form['picture']
-            print "bye"
         if request.form['console']:
             editGame.console = request.form['console']
         if request.form['description']:
@@ -319,6 +317,9 @@ def deleteGame(Game_id):
 
 @app.route('/game/new', methods=['GET', 'POST'])
 def newGame():
+    """
+        used to create a new game entry in the database for the current user.
+    """
     if 'username' not in login_session:
         return redirect('/login')
     consoles = get_Consoles()
@@ -347,21 +348,22 @@ def gameInfo(console, Game_id):
 # JSON endpoints
 
 @app.route('/game/<int:game_id>/JSON')
-def GamesJSON(Game_id):
-    game = session.query(Games).filter_by(Game_id=Game_id).one()
+def GamesJSON(game_id):
+    game = session.query(Game).filter_by(id=game_id).one()
+    return jsonify(game=game.serialize)
 
-
-@app.route('/console/<console>/games/<game_title>/JSON')
-def gameJSON(game_title, console):
-    gameDetails = session.query(Game).filter_by(name=game_title,  console=console).one()
+@app.route('/console/<console>/games/<int:game_id>/JSON')
+def gameJSON(game_id, console):
+    gameDetails = session.query(Game).filter_by(id=game_id,  console=console).one()
     return jsonify(gameDetails=gameDetails.serialize)
 
 
 @app.route('/console/<console>/JSON')
 def consoleGames(console):
-    allGames = session.query(Game).filter_by(console).all()
+    allGames = session.query(Game).filter_by(console=console).all()
     return jsonify(allGames= [i.serialize for i in allGames])
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run(host = '0.0.0.0', port = 5000)
