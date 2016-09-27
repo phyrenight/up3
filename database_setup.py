@@ -21,7 +21,7 @@ class Game(Base):
     game_name = Column(String(80), nullable=True)
     console = Column(String(20), nullable=True)
     user_name = Column(String(80),nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'),nullable=False)#, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'),nullable=False)
     description = Column(String(250))
     picture = Column(String(250))
     __table_args__ = (ForeignKeyConstraint([user_id],['user.id']), {})
