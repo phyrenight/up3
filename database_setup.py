@@ -28,7 +28,7 @@ class Game(Base):
     @property
     def serialize(self):
         return {
-            'name': self.name,
+            'name': self.game_name,
             'id': self.id,
             'console': self.console,
             'user_name': self.user_name,
