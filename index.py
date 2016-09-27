@@ -10,14 +10,15 @@ from flask import make_response, url_for, redirect, render_template
 import requests
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import User, Game, Base
+from database_setup import User, Game, Base, engine
 from sqlalchemy.engine.url import URL
-
+from config import SQLALCHEMY_DATABASE_URI
 
 app = Flask(__name__)
 app.config.from_object('config')
 
-engine = create_engine('sqlite:///gameswap.db')
+#engine = create_engine('sqlite:///gameswap.db')
+#engine = create_engine('postgresql://catalog:catalog@localhost:5432/catalog')#SQLALCHEMY_DATABASE_URI)
 Base.metadata.bind = engine
 DB = sessionmaker(bind=engine)
 session = DB()
@@ -270,7 +271,7 @@ def disconnect():
         flash("You are not logged in")
         return redirect(url_for('welcome'))
 
-
+@app.route('/')
 @app.route('/welcome')
 def welcome():
     """
@@ -369,15 +370,17 @@ def newGame():
     if 'username' not in login_session:
         return redirect('/login')
     consoles = get_Consoles()
+    #print type(str(login_session['username']))
     if request.method == 'POST':
-        newGame = Game(name=request.form['name'], console=request.form['console'],
-                        description=request.form['description'], user_name=login_session['username'])
+        userId = session.query(User).filter_by(name=login_session['username']).one()
+        newGame = Game(game_name=str(request.form['name']), console=request.form['console'],
+                        description=request.form['description'], user_name=login_session['username'],
+                        user_id=userId.id)
         session.add(newGame)
         session.commit()
-        flash("{} has been added".format(newGame.name))
+        flash("{} has been added".format(newGame.game_name))
         return render_template("welcome.html",consoles=consoles)
     return render_template("newgame.html", consoles=consoles)
-
 
 
 # JSON endpoints

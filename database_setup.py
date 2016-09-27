@@ -1,29 +1,30 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
+import config
 
 
 
 Base = declarative_base()
 
 class User(Base):
-    __tablename__ = 'User'
-    id = Column(Integer, primary_key = True)
-    name = Column(String(80), nullable = False)
-    email = Column(String(80), nullable = False)
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), nullable=False)
+    email = Column(String(80), nullable=False)
     picture = Column(String(250))
 
 class Game(Base):
     __tablename__ = 'Game'
-    name = Column(String(80), nullable = True)
-    id = Column(Integer, primary_key = True)
-    console = Column(String(20), nullable = True)
-    user_name = Column(String, ForeignKey('User.name'))
+    id = Column(Integer, primary_key=True)
+    game_name = Column(String(80), nullable=True)
+    console = Column(String(20), nullable=True)
+    user_name = Column(String(80),nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'),nullable=False)#, ForeignKey('user.id'))
     description = Column(String(250))
     picture = Column(String(250))
-    user = relationship('User')
-
+    __table_args__ = (ForeignKeyConstraint([user_id],['user.id']), {})
     @property
     def serialize(self):
         return {
@@ -35,5 +36,5 @@ class Game(Base):
             'picture': self.picture,
         }
 
-engine = create_engine('sqlite:///gameswap.db')
-Base.metadata.create_all(engine)
+engine = create_engine('postgresql://cata:cata@localhost:5432/cata')
+#Base.metadata.create_all(engine)
