@@ -4,7 +4,7 @@
     <div id="crumbs">
     <a href="/welcome">home/</a>
     <a href='{{url_for("displayConsoleGames", title=editGame.console )}}'>{{ editGame.console }}/</a><!-- console of the game -->
-    <a href='{{url_for("gameInfo",console=editGame.console, Game_id=editGame.id)}}'>{{ editGame.name }}/</a>
+    <a href='{{url_for("gameInfo",console=editGame.console, Game_id=editGame.id)}}'>{{ editGame.game_name }}/</a>
     <p>Edit game</p>
     </div>
     <aside>
@@ -26,7 +26,7 @@
                 </label>
                 <br/>
                 <label for="name">Name:
-                  <input type="text" maxlength="80" name='name' value="{{ editGame.name }}" placeholder="{{ editGame.name }}">
+                  <input type="text" maxlength="80" name='name' value="{{ editGame.game_name }}" placeholder="{{ editGame.game_name }}">
                 </label>
                 <br/>
               

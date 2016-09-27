@@ -17,7 +17,7 @@
     <h2>{{ console_name }} games</h2>
     {% for video_Game in Games %}
     <section class="game_card">
-       <h3><a href='{{url_for("gameInfo",console=video_Game.console, Game_id=video_Game.id)}}'>{{video_Game.name}}</a></h3>
+       <h3><a href='{{url_for("gameInfo",console=video_Game.console, Game_id=video_Game.id)}}'>{{video_Game.game_name}}</a></h3>
 <!-- add image of game case here -->
        <p>owner: {{video_Game.user_name}}</p>
        <p>description: {{ video_Game.description }} </p>

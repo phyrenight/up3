@@ -323,7 +323,7 @@ def editGame(Game_id):
     if request.method == 'POST':
 
         if request.form['name']:
-            editGame.name = request.form['name']
+            editGame.game_name = request.form['name']
         if request.form['picture']:
             editGame.pic = request.form['picture']
         if request.form['console']:
@@ -345,7 +345,7 @@ def deleteGame(Game_id):
     """
     consoles = get_Consoles()
     deleteGame = session.query(Game).filter_by(id=Game_id).one()
-    title = deleteGame.name
+    title = deleteGame.game_name
     if 'username' not in login_session: 
        return('/login')
     console = deleteGame.console
@@ -370,7 +370,6 @@ def newGame():
     if 'username' not in login_session:
         return redirect('/login')
     consoles = get_Consoles()
-    #print type(str(login_session['username']))
     if request.method == 'POST':
         userId = session.query(User).filter_by(name=login_session['username']).one()
         newGame = Game(game_name=str(request.form['name']), console=request.form['console'],
