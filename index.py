@@ -135,9 +135,11 @@ def gconnect():
     access_token = creds.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'  % access_token)
     ht = httplib2.Http()
-    result = json.loads(ht.request(url, 'GET')[1])
+    result = requests.get(url).json()
+    #result = json.loads(ht.request(url, 'GET')[1])
+    print result
     if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 500)
+        response = make_response(json.dumps(result.get('error')), 501)
         response.headers['Content-Type'] = 'application/json'
 
     gplus_id = creds.id_token['sub']
@@ -159,7 +161,7 @@ def gconnect():
         response = make_response(json.dumps('You are connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
-
+    # to get gconnect to work on server add .access_token to the end of creds
     login_session['credentials'] = creds
     login_session['gplus_id'] = gplus_id
 
@@ -236,6 +238,7 @@ def gdiscon():
         	json.dumps('You are not connected'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
+    # note to get gdiscon to work on server take access_token  off of creds, that is below
     access_token = creds.access_token
     url = 'https://accounts.google.com/o/oauth2/revoke?token%s' % (access_token)
     ht = httplib2.Http()
@@ -299,14 +302,16 @@ def gameInfo(console, Game_id):
     """
     consoles = get_Consoles()
     usersGames = session.query(Game).filter_by(id=Game_id).one()
-    if usersGames.user_name != login_session['username']:
-        print usersGames.user_name
-        for i in login_session:
-            print login_session['username']
+    try:
+        if usersGames.user_name != login_session['username'] or usersGames.user_name == None:
+            print usersGames.user_name
+            for i in login_session:
+                print login_session['username']
+            return render_template('game.html', consoles=consoles, usersGames=usersGames)
+        else:
+            return render_template('privateGame.html', consoles=consoles, usersGames=usersGames)
+    except:
         return render_template('game.html', consoles=consoles, usersGames=usersGames)
-    else:
-        return render_template('privateGame.html', consoles=consoles, usersGames=usersGames)
-
 
 @app.route('/edit_game/<int:Game_id>', methods=['GET', 'POST'])
 def editGame(Game_id):
