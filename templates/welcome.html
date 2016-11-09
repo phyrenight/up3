@@ -15,9 +15,8 @@
 </aside>
 <article>
     <section>
-            <h2>Welcome to GameSwap</h2>
-    </section> 
-    <section id="flash">
+            <h2>Welcome to GameSwap</h2> 
+    <div id="flash">
       {% with messages = get_flashed_messages() %}
       {% if messages %}
         <ul>
@@ -27,6 +26,7 @@
         </ul>
       {% endif %}
       {% endwith %}
+      </div>
     </section>
     <section id="recentGames">
        <h2>Recent Games:</h2>
