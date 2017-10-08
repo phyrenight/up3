@@ -1,0 +1,5 @@
+*.pyc
+fb_secrets.json
+client_secret.json
+config.py
+.vagrant
