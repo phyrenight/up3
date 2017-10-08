@@ -1,8 +1,8 @@
-#Udacity project 3
+# Udacity project 3
 
 Game swap a web site catalogue used to find game swaps. User can add, remove, and edit their own games in the database.
 
-##Install
+## Install
 
 To install and run game swap you will need:
 
@@ -21,12 +21,12 @@ to install use pip:
 
 an easier alternative would be to install a virtual environment.You can do that by following the instructions [here](https://www.udacity.com/wiki/ud197/install-vagrant).
 
-##To run program:
+## To run program:
 - navigate to the directory that contains the files
 - type `python database_setup.py`
 - type `python index.py`
 
-###to run with some populated data:
+### to run with some populated data:
 - navigate to the directory that contains the files
 - type `python database_setup.py`
 - type `python populator.py`
